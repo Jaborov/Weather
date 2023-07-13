@@ -3,16 +3,6 @@
     class="flex flex-col flex-1 items-center"
     v-if="this.weatherDataResult !== null"
   >
-    <!--Banner-->
-    <div
-      v-if="$route.query.preview"
-      class="text-white p-4 bg-weather-secondary w-full text-center"
-    >
-      <p>
-        You are currently previewing this city, click the "+" icon to start
-        tracking this city.
-      </p>
-    </div>
     <!--Weather Overview-->
     <div class="flex flex-col items-center text-white py-12">
       <h1 class="text-4xl mb-2">{{ $route.params.city }}</h1>
@@ -56,7 +46,7 @@
     <div class="max-w-screen-md w-full py-12">
       <div class="mx-8 text-white">
         <h2 class="mb-4">Hourly Weather</h2>
-        <div class="flex gap-10 overflow-x-scroll">
+        <div class="flex gap-10 overflow-auto hover:overflow-x-scroll">
           <div
             v-for="hourData in weatherDataResult.hourly"
             :key="hourData.dt"
@@ -81,7 +71,8 @@
       </div>
     </div>
     <hr class="border-white border-opacity-10 border w-full" />
-    <!-- Weekly Weather -->|
+
+    <!-- Weekly Weather -->
     <div class="max-w-screen-md w-full py-12">
       <div class="mx-8 text-white">
         <h2 class="mb-4">7 Day Forecast</h2>

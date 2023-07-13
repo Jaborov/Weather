@@ -1,9 +1,11 @@
 <template>
   <div>
-    <AsyncCityView />
-    <template>
-      <p>Loading..</p>
-    </template>
+    <Suspense>
+      <AsyncCityView />
+      <template #fallback>
+        <p>Loading..</p>
+      </template>
+    </Suspense>
   </div>
 </template>
 
