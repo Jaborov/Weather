@@ -1,7 +1,11 @@
 <template>
   <div class="flex flex-col min-h-screen font-Roboto bg-weather-primary">
     <site-navigations />
-    <router-view />
+    <router-view class="flex-1" v-slot="{ Component }">
+      <transition>
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 <script>
@@ -12,3 +16,12 @@ export default {
   },
 };
 </script>
+<style>
+.page-enter-active {
+  transition: 600ms ease all;
+}
+
+.page-enter-from {
+  opacity: 0;
+}
+</style>

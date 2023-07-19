@@ -15,7 +15,7 @@
     </div>
     <!--Weather Overview-->
     <div class="flex flex-col items-center text-white py-12">
-      <h1 class="text-4xl mb-2">{{ $route.params.city }}</h1>
+      <h1 class="text-4xl mb-2">{{ this.weatherDataResult.timezone }}</h1>
       <p class="text-sm mb-12">
         {{
           new Date(this.weatherDataResult.currentTime).toLocaleDateString(
@@ -81,7 +81,7 @@
       </div>
     </div>
     <hr class="border-white border-opacity-10 border w-full" />
-    <!-- Weekly Weather -->|
+    <!-- Weekly Weather -->
     <div class="max-w-screen-md w-full py-12">
       <div class="mx-8 text-white">
         <h2 class="mb-4">7 Day Forecast</h2>
@@ -108,6 +108,13 @@
           </div>
         </div>
       </div>
+    </div>
+    <div
+      class="flex items-center gap-2 py-12 text-white cursor-pointer duration-150 hover:text-red-500"
+      @click="removeCity"
+    >
+      <i class="fa-solid fa-trash"></i>
+      <p>Remove City</p>
     </div>
   </div>
 </template>
@@ -146,11 +153,20 @@ export default {
           hour.currentTime =
             utc + 1000 * this.weatherDataResult.timezone_offset;
         });
-        console.log(this.weatherDataResult);
         return this.weatherDataResult.data;
       } catch (err) {
-        console.log(err);
+        alert(err);
       }
+    },
+    removeCity() {
+      const cities = JSON.parse(localStorage.getItem("savedCities"));
+      const updatedCities = cities.filter(
+        (city) => city.id !== this.$route.query.id
+      );
+      localStorage.setItem("savedCities", JSON.stringify(updatedCities));
+      this.$router.push({
+        name: "home",
+      });
     },
   },
 };

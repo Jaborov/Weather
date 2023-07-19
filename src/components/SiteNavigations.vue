@@ -17,7 +17,12 @@
         <i
           class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"
           @click="addCity"
+          v-if="$route.query.preview"
         ></i>
+        <!-- <i
+          class="fa-solid fa-location text-xl hover:text-weather-secondary duration-150 cursor-pointer"
+          @click="getLocation()"
+        ></i> -->
       </div>
       <BaseModal v-model:modalActive="modalDisable"
         ><h1 class="text-black">
@@ -38,6 +43,8 @@
 </template>
 <script>
 import RouterLink from "vue-router";
+import { uid } from "uid";
+// import { mapActions } from "vuex";
 import BaseModal from "./BaseModal.vue";
 export default {
   components: {
@@ -47,11 +54,35 @@ export default {
   data() {
     return {
       modalDisable: false,
+      savedCities: [],
     };
   },
   methods: {
+    // ...mapActions({
+    //   getLocation: "getLocation",
+    // }),
     showModal() {
       this.modalDisable = true;
+    },
+    addCity() {
+      if (localStorage.getItem("savedCities")) {
+        this.savedCities = JSON.parse(localStorage.getItem("savedCities"));
+      }
+      const locationObj = {
+        id: uid(),
+        state: this.$route.params.state,
+        city: this.$route.params.city,
+        coords: {
+          lat: this.$route.query.lat,
+          lng: this.$route.query.lng,
+        },
+      };
+      this.savedCities.push(locationObj);
+      localStorage.setItem("savedCities", JSON.stringify(this.savedCities));
+      let query = Object.assign({}, this.$route.query);
+      delete query.preview;
+      query.id = locationObj.id;
+      this.$router.replace({ query });
     },
   },
 };
